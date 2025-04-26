@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo Installing source NPM dependencies...
+      - npm install
+  pre_build:
+    commands:
+      - echo "Listing files in source directory ($CODEBUILD_SRC_DIR):"
+      - ls -la
+  build:
+    commands:
+      - echo Build started on `date`
+      # Adicionado para garantir permissão de execução
+      - echo "Setting execute permission for react-scripts"
+      - chmod +x node_modules/.bin/react-scripts
+      # Comando original do build
+      - npm run build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+    - 'build/**/*'
+    - 'appspec.yml'
+    - 'scripts/**/*'
